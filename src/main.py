@@ -25,12 +25,16 @@ all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c
 
 for item in all_items:
 
-    item_descr = item.find('span')
+    item_type = item.find('a').find(text=True, recursive=False)
 
+    item_rooms = item.select('span b')
+    item_rooms = item_rooms[1]
 
-    # item_descritpions = item.find_all('div', attrs={'class':'o-grid'})
+    item_space = item.select('span b')
+    item_space = item_space[2]
 
-    print(item_descr)
+    print(item_rooms)
+    print(item_space)
     print("\n")
 
 
@@ -46,4 +50,4 @@ for item in all_items:
 
 
 # TODO
-    # CONTINUE AND GET STUFF FROM SCRAPPED PAGE
+    # CONTINUE AND scrap multiple paages then store in df
