@@ -18,6 +18,32 @@ browser.get(url)
 
 # get all page data
 soup = BeautifulSoup(browser.page_source, 'html.parser')
+# soup = soup.encode("utf-8")
+
+
+all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c-overlay'})
+
+for item in all_items:
+
+    item_descr = item.find('span')
+
+
+    # item_descritpions = item.find_all('div', attrs={'class':'o-grid'})
+
+    print(item_descr)
+    print("\n")
+
+
+
+
+
+
+
+
+
+
+
+
 
 # TODO
     # CONTINUE AND GET STUFF FROM SCRAPPED PAGE
