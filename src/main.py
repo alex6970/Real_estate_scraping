@@ -2,7 +2,7 @@
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-# import pandas as pd
+import pandas as pd
 import time
 
 df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price'])
@@ -33,9 +33,12 @@ for item in all_items:
     item_space = item.select('span b')
     item_space = item_space[2]
 
+    item_price = item.find("strong", "u-text-md u-color-primary").text
+
     print(item_type)
     print(item_rooms)
     print(item_space)
+    print(item_price)
     print("\n")
 
 
