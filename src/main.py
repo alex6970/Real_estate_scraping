@@ -7,6 +7,12 @@ import time
 
 df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price'])
 
+type_list = []
+rooms_list = []
+size_list = []
+location_list = []
+price_list = []
+
 # display local time
 print(time.strftime("%H:%M:%S", time.localtime()))
 
@@ -25,26 +31,40 @@ all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c
 
 for item in all_items:
 
-    item_type = item.find('a').find(text=True, recursive=False)
+    item_type = item.find('a').find(text=True, recursive=False).strip()
+    type_list.append(item_type)
 
-    item_rooms = item.select('span b')
-    item_rooms = item_rooms[1]
+    item_rooms = item.find("span").find("b").find(recursive=False).get_text()
+    rooms_list.append(item_rooms)
 
-    item_space = item.select('span b')
-    item_space = item_space[2]
+    item_space = item.select("span b")[2].get_text(strip=True)
+    size_list.append(item_space)
+    
+    item_price = item.find("strong", "u-text-md u-color-primary").get_text()
+    item_price = item_price.replace("€","").strip()
+    price_list.append(item_price)
 
-    item_price = item.find("strong", "u-text-md u-color-primary").text
+    item_location = item.find("p", "u-mt-sm").get_text()
+    location_list.append(item_location)
+
 
     print(item_type)
     print(item_rooms)
     print(item_space)
     print(item_price)
+    print(item_location)
     print("\n")
 
 
+df['Type'] = type_list
+df['Rooms'] = rooms_list
+df['Size'] = size_list
+df['Price'] = price_list
+df['Location'] = location_list
 
-
-
+print(df.iloc[0:])
+print(len(df), "items have been scraped from this category.")
+print(df.shape)
 
 
 
