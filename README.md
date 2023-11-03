@@ -14,7 +14,7 @@ LABELS
 
 ## About the project
 
-[insert description]
+Small project intended to get real estate data from various regions in France (from Orpi website), for further analysis. Intended for learning purposes.
 
 <br>
 
@@ -35,16 +35,11 @@ LABELS
 ## Project Organization
 
 
-    ├── scripts
-    │   ├── some_script.py            <- App main script
+    ├── src
     │   │
-    │   ├── another.py                <- Another script
-    │   │
-    │   └── another_one.py            <- Yet another
+    │   └── main.py                   <- Main web scraping python script
     │
     ├── LICENSE                       <- MIT License
-    │
-    ├── Notes.md                      <- Notes along the project.
     │
     └── README.md                     <- The top-level README
 
