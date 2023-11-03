@@ -5,7 +5,7 @@ from selenium import webdriver
 # import pandas as pd
 import time
 
-# df = pd.DataFrame(columns=['Brand', 'Model', 'Description', 'Color', 'Price'])
+df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price'])
 
 # display local time
 print(time.strftime("%H:%M:%S", time.localtime()))
@@ -33,6 +33,7 @@ for item in all_items:
     item_space = item.select('span b')
     item_space = item_space[2]
 
+    print(item_type)
     print(item_rooms)
     print(item_space)
     print("\n")
