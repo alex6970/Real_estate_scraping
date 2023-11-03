@@ -4,7 +4,9 @@ from random import randint
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import pandas as pd
-import time
+from tqdm import tqdm
+from time import sleep
+
 
 # var declarations
 df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price'])
@@ -15,8 +17,7 @@ size_list = []
 location_list = []
 price_list = []
 
-# main website url
-url_base = 'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page' # Orpi > IDF ; 40m² min
+regions_list = ["ile-de-france", "pays-de-la-loire", "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
 
 # display local time
 start_time = time.strftime("%H:%M:%S", time.localtime())
@@ -25,41 +26,46 @@ print(start_time)
 # Open website
 browser = webdriver.Chrome()
 
-# Scrap data from the 30 first pages of the website
-for page in range(1, 30):
+# Region choice
+for i in range (0,4):
     
-    url = f'{url_base}={page}' 
+    url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={regions_list[i]}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
 
-    browser.get(url)
+    # Scrap data from the 30 first pages of the website
+    for page in range(31):
 
-    # get all page data
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
+        url = f'{url_reg}={page}' 
+
+        browser.get(url)
+
+        # get all page data
+        soup = BeautifulSoup(browser.page_source, 'html.parser')
 
 
-    all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c-overlay'})
+        all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c-overlay'})
 
-    for item in all_items:
+        for item in all_items:
 
-        item_type = item.find('a').find(text=True, recursive=False).strip()
-        type_list.append(item_type)
+            item_type = item.find('a').find(text=True, recursive=False).strip()
+            type_list.append(item_type)
 
-        item_rooms = item.find("span").find("b").find(recursive=False).get_text()
-        rooms_list.append(item_rooms)
+            item_rooms = item.find("span").find("b").find(recursive=False).get_text()
+            rooms_list.append(item_rooms)
 
-        # In case there is no size specified
-        try:
-            item_space = item.select("span b")[2].get_text(strip=True)
-            size_list.append(item_space)
+            # In case there is no size specified
+            try:
+                item_space = item.select("span b")[2].get_text(strip=True)
+                size_list.append(item_space)
 
-        except IndexError:
-            size_list.append("No info")
+            except IndexError:
+                size_list.append("No info")
 
-        item_price = item.find("strong", "u-text-md u-color-primary").get_text()
-        item_price = item_price.replace("€","").strip()
-        price_list.append(item_price)
+            item_price = item.find("strong", "u-text-md u-color-primary").get_text()
+            item_price = item_price.replace("€","").strip()
+            price_list.append(item_price)
 
-        item_location = item.find("p", "u-mt-sm").get_text()
-        location_list.append(item_location)
+            item_location = item.find("p", "u-mt-sm").get_text()
+            location_list.append(item_location)
 
     # time.sleep(randint(2,10)) # crawling in short random bursts of time/avoid ip ban
 
@@ -82,5 +88,13 @@ df.to_csv('real_estate_paris_orpi_df.csv', index=False, encoding='utf-8')
 
 
 # TODO :
-#   Scrap from multiple regions (website filter)
+#   Fix progress bar
+#   Scrap from multiple regions (website filter) + créer nouvelle variable dans le tableau pour la region
 #   Get more characteristics/info from house description page
+#   pip freeze
+
+
+# https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
+
+# https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=pays-de-la-loire&locations%5B0%5D%5Blabel%5D=Pays%20de%20la%20Loire%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
+
