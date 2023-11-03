@@ -9,7 +9,7 @@ LABELS
 -->
 
 
-# [Insert project name]
+# Real Estate web scraping 🏠
 
 
 ## About the project
@@ -49,7 +49,7 @@ Small project intended to get real estate data from various regions in France (f
 
 ## Features and uses 💻
 
-[Insert features and uses]
+Clone the project, install the required libraries from requirements.txt and run the main script.
 
 <br>
 
