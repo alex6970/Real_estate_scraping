@@ -1,4 +1,4 @@
-#! .\venv\scripts\python.exe
+#! .\im_venv\scripts\python.exe
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
