@@ -1,38 +1,43 @@
 #! .\im_venv\scripts\python.exe
 
+import warnings
+warnings.filterwarnings("ignore")
+
 from random import randint
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import pandas as pd
 from tqdm import tqdm
-from time import sleep
+from time import localtime, sleep, strftime
 
 
 # var declarations
-df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price'])
+df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price', 'Region'])
 
 type_list = []
 rooms_list = []
 size_list = []
 location_list = []
 price_list = []
+region_loc_list = []
 
 regions_list = ["ile-de-france", "pays-de-la-loire", "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
 
 # display local time
-start_time = time.strftime("%H:%M:%S", time.localtime())
+start_time = strftime("%H:%M:%S", localtime())
 print(start_time)
 
 # Open website
 browser = webdriver.Chrome()
 
 # Region choice
-for i in range (0,4):
-    
-    url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={regions_list[i]}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
+for region in range(0,4):
+# for i in tqdm(range(0,4), desc='Total progress'):  
+#  
+    url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={regions_list[region]}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
 
     # Scrap data from the 30 first pages of the website
-    for page in range(31):
+    for page in range(2):
 
         url = f'{url_reg}={page}' 
 
@@ -44,7 +49,10 @@ for i in range (0,4):
 
         all_items = soup.find_all('div', attrs={'class':'c-box__inner c-box__inner--sm c-overlay'})
 
+        
         for item in all_items:
+
+            region_loc_list.append(regions_list[region])
 
             item_type = item.find('a').find(text=True, recursive=False).strip()
             type_list.append(item_type)
@@ -75,6 +83,7 @@ df['Rooms'] = rooms_list
 df['Size'] = size_list
 df['Price'] = price_list
 df['Location'] = location_list
+df['Region'] = region_loc_list
 
 # Final insights
 print(df.iloc[:5])
@@ -88,7 +97,6 @@ df.to_csv('real_estate_paris_orpi_df.csv', index=False, encoding='utf-8')
 
 
 # TODO :
-#   Fix progress bar
 #   Scrap from multiple regions (website filter) + créer nouvelle variable dans le tableau pour la region
 #   Get more characteristics/info from house description page
 #   pip freeze
