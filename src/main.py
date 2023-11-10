@@ -93,7 +93,7 @@ print("\n")
 print(df.shape)
 
 # storing the dataframe as a CSV file
-df.to_csv('real_estate_paris_orpi_df.csv', index=False, encoding='utf-8')
+df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf-8')
 
 
 # TODO :
