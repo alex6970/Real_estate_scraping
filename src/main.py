@@ -97,9 +97,10 @@ df.to_csv('real_estate_paris_orpi_df.csv', index=False, encoding='utf-8')
 
 
 # TODO :
-#   Scrap from multiple regions (website filter) + créer nouvelle variable dans le tableau pour la region
+#   Scrap from multiple regions (website filter) + créer nouvelle variable dans le tableau pour la region : optimiser path name de recherche classe + verifier m² > 1000 séparateur
 #   Get more characteristics/info from house description page
 #   pip freeze
+#   PowerBI Analysis and push to github
 
 
 # https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
