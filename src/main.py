@@ -220,12 +220,13 @@ df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf
 
 
 # TODO :
+#   Reparer erreur répetioin de lignes cf ground dans csv
 #   Correctcly scrap basic +specific data & merge branch
 #   Add tqm/progress bar and check on performance
 #   pip freeze
 #   PowerBI Analysis and push to github
 
 
-# https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
+# https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=mixte&page=&recentlySold=false
 
 # https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=pays-de-la-loire&locations%5B0%5D%5Blabel%5D=Pays%20de%20la%20Loire%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
