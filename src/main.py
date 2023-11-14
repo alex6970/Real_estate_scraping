@@ -47,16 +47,17 @@ print(start_time)
 browser = webdriver.Chrome()
 
 # Region choice
-for region in range(0, 1):
+for region in regions_list:
     # for i in tqdm(range(0,4), desc='Total progress'):
     #
-    url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={regions_list[region]}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
+    url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={region}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
 
     # Scrap data from the 30 first pages of the website
-    for page in range(2):
+    for page in range(1,2):
 
+        print(page)
         url = f'{url_reg}={page}'
-
+        print(url + "\n")
         browser.get(url)
 
         # get all page data
@@ -66,21 +67,33 @@ for region in range(0, 1):
 
         for item in all_items:
 
-            region_loc_list.append(regions_list[region])
+            region_loc_list.append(region)
 
             item_type = item.find('a').find(text=True, recursive=False).strip()
             type_list.append(item_type)
 
-            item_rooms = item.find('span').find('b').find(recursive=False).get_text()
-            rooms_list.append(item_rooms)
+            if item_type == 'Terrain':
+                rooms_list.append("None")
+            else:
+                item_rooms = item.find('span').find('b').find(recursive=False).get_text()
+                rooms_list.append(item_rooms)
 
-            # In case there is no size specified
-            try:
-                item_space = item.select('span b')[2].get_text(strip=True)
-                size_list.append(item_space)
+            # In case it's Terrain type => size not placed in the same position
+            if item_type == 'Terrain':
+                # In case there is no size specified
+                try:
+                    item_space = item.select('span b')[1].get_text(strip=True)
+                    size_list.append(item_space)
 
-            except IndexError:
-                size_list.append("No info")
+                except IndexError:
+                    size_list.append("No info")
+            else:
+                try:
+                    item_space = item.select('span b')[2].get_text(strip=True)
+                    size_list.append(item_space)
+
+                except IndexError:
+                    size_list.append("No info")
 
             item_price = item.find('strong', 'u-text-md u-color-primary').get_text()
 
@@ -220,8 +233,8 @@ df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf
 
 
 # TODO :
-#   Reparer erreur répetioin de lignes cf ground dans csv
-#   Correctcly scrap basic +specific data & merge branch
+#   Reparer erreur => itération des quatre regions (ile de france apparait pas sur le csv actuel) => dans la boucle for =>in range ou meilleure option
+#   Correctcly scrap basic + specific data & merge branch
 #   Add tqm/progress bar and check on performance
 #   pip freeze
 #   PowerBI Analysis and push to github
