@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 # var declarations
 df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price', 'Region', 'Bedrooms', 'Bathrooms', 'Equipped kitchen',
-                  'Terrace/Balcony', 'Parking space', 'Ground', 'Garage', 'Pool', 'Cellar', 'Construction date', 'Construction materials'])
+                  'Terrace/Balcony', 'Parking space', 'Ground', 'Garage', 'Pool', 'Cellar', 'Construction date', 'Construction materials', 'Website'])
 
 # basic details
 type_list = []
@@ -36,6 +36,8 @@ cellar_list = []
 consdate_list = []
 consmaterials_list = []
 
+website_list = []
+
 regions_list = ["ile-de-france", "pays-de-la-loire",
                 "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
 
@@ -53,7 +55,8 @@ for region in regions_list:
     url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={region}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
 
     # Scrap data from the 30 first pages of the website
-    for page in range(1,2):
+    # in range(1, 31)
+    for page in range(1, 31):
 
         print(page)
         url = f'{url_reg}={page}'
@@ -106,6 +109,8 @@ for region in regions_list:
             # scrape details from each house page
             details_url = "https://www.orpi.com" + item.find('a', 'u-link-unstyled c-overlay__link')['href']
             print(details_url)
+
+            website_list.append(details_url)
 
             browser.get(details_url)
             soup = BeautifulSoup(browser.page_source, 'html.parser')
@@ -220,6 +225,8 @@ df['Pool'] = pool_list
 df['Cellar'] = cellar_list
 df['Construction date'] = consdate_list
 df['Construction materials'] = consmaterials_list
+
+df['Website'] = website_list
 
 # Final insights
 print(df.iloc[:5])
