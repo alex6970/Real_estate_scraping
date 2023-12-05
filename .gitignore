@@ -1,0 +1,4 @@
+# Environments
+im_venv/
+*.csv
+test.py
