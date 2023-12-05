@@ -49,14 +49,14 @@ print(start_time)
 browser = webdriver.Chrome()
 
 # Region choice
-for region in regions_list:
+for region in tqdm(regions_list, desc='Total progress'):
     # for i in tqdm(range(0,4), desc='Total progress'):
     #
     url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={region}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
 
     # Scrap data from the 30 first pages of the website
     # in range(1, 31)
-    for page in range(1, 31):
+    for page in range(1, 16):
 
         print(page)
         url = f'{url_reg}={page}'
