@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 
 
 # var declarations
-df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Price', 'Region', 'Bedrooms', 'Bathrooms', 'Equipped kitchen',
+df = pd.DataFrame(columns=['Type', 'Rooms', 'Size', 'Location', 'Zip code', 'Price', 'Region', 'Bedrooms', 'Bathrooms', 'Equipped kitchen',
                   'Terrace/Balcony', 'Parking space', 'Ground', 'Garage', 'Pool', 'Cellar', 'Construction date', 'Construction materials', 'Website'])
 
 # basic details
@@ -37,11 +37,12 @@ consdate_list = []
 consmaterials_list = []
 
 website_list = []
+zipcode_list = []
 
-regions_list = ["ile-de-france"]
+# regions_list = ["ile-de-france"]
 
-# regions_list = ["ile-de-france", "pays-de-la-loire",
-#                 "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
+regions_list = ["ile-de-france", "pays-de-la-loire",
+                "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
 
 # Open website
 browser = webdriver.Chrome()
@@ -50,12 +51,7 @@ browser = webdriver.Chrome()
 # for region in tqdm(regions_list, desc='Total progress'):
 for region in regions_list:
 
-    # url_reg = f'https://www.orpi.com/recherche/buy?realEstateTypes%5B%5D=maison&realEstateTypes%5B%5D=appartement&locations%5B0%5D%5Bvalue%5D={region}&minSurface=40&sort=date-down&layoutType=list&recentlySold=false'
-    # # https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&realEstateTypes%5B0%5D=maison&realEstateTypes%5B1%5D=appartement&locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page=4&recentlySold=false#
-    # # url_reg = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D={region}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page'
-
-    # Scrap data from the 30 first pages of the website range(1, 31)
-    for page in range(1, 2):
+    for page in range(1, 31):
 
         url = f'https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&realEstateTypes%5B0%5D=maison&realEstateTypes%5B1%5D=appartement&locations%5B0%5D%5Bvalue%5D={region}&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=list&page={page}&recentlySold=false#'
         # url = f'{url_reg}={page}'
@@ -83,13 +79,14 @@ for region in regions_list:
             print(item_rooms)
 
             # Size
-            # try:
-            item_space = item.select('b span')[1].get_text(strip=True)
-            size_list.append(item_space)
-            print(item_space)
+            try:
+                item_space = item.select('b span')[1].get_text(strip=True)
+                item_space = item_space.split(" ", 1,)[0]
+                size_list.append(item_space)
+                print(item_space)
 
-            # except IndexError:
-            #     size_list.append("No info")
+            except IndexError:
+                size_list.append("No info")
 
             # Price
             item_price = item.find('span', 'u-text-bold c-estate-thumb__price-tag__price u-h4').get_text()
@@ -98,7 +95,7 @@ for region in regions_list:
             print(item_price)
 
             # Location
-            item_location = item.find('p', 'u-mt-n c-estate-thumb__infos__location').get_text()
+            item_location = item.find('p', 'u-mt-n c-estate-thumb__infos__location').get_text(strip=True)
             location_list.append(item_location)
             print(item_location)
 
@@ -106,8 +103,13 @@ for region in regions_list:
             ## Scrape details from each house page
             details_url = "https://www.orpi.com" + item.find('a', 'u-link-unstyled c-overlay__link')['href']
             print(details_url)
-
+            
+            # Website url
             website_list.append(details_url)
+
+            # Zip code
+            zipcode = re.search(r'\d{2}[ ]?\d{3}', details_url).group(0)
+            zipcode_list.append(zipcode)
 
             browser.get(details_url)
             soup = BeautifulSoup(browser.page_source, 'html.parser')
@@ -197,6 +199,7 @@ df['Rooms'] = rooms_list
 df['Size'] = size_list
 df['Price'] = price_list
 df['Location'] = location_list
+df['Zip code'] = zipcode_list
 df['Region'] = region_loc_list
 
 df['Bedrooms'] = bedroom_list
@@ -228,7 +231,7 @@ df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf
 #   Reparer erreur => itération des quatre regions (ile de france apparait pas sur le csv actuel) => dans la boucle for =>in range ou meilleure option
 #   Correctcly scrap basic + specific data & merge branch
 #   Add tqm/progress bar and check on performance
-#   pip freeze
+#   pip freeze + suppr test.py
 #   PowerBI Analysis and push to github
 
 
