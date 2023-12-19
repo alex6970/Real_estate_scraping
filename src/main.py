@@ -228,10 +228,6 @@ df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf
 
 
 # TODO :
-#   Reparer erreur => itération des quatre regions (ile de france apparait pas sur le csv actuel) => dans la boucle for =>in range ou meilleure option
-#   Correctcly scrap basic + specific data & merge branch
-#   Add tqm/progress bar and check on performance
-#   pip freeze + suppr test.py
 #   PowerBI Analysis and push to github
 
 
