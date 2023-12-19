@@ -24,8 +24,6 @@ Small project intended to get real estate data from various regions in France (f
 
 - [Project Organization](#project-organization)
 - [Features and uses](#features-and-uses-)
-- [Technologies & packages](#technologies--packages-)
-- [Screenshots](#screenshots-)
 - [Credits](#credits-)
 
 <br>
@@ -41,6 +39,8 @@ Small project intended to get real estate data from various regions in France (f
     │
     ├── LICENSE                       <- MIT License
     │
+    ├── requirements.txt              <- Required libraries/packages
+    │
     └── README.md                     <- The top-level README
 
 <br>
@@ -55,36 +55,8 @@ Clone the project, install the required libraries from requirements.txt and run 
 
 
 
-## Technologies & packages 🔧
-
-&rarr; [insert technologies & packages]
-<!---
-or `pip freeze > requirements.txt`
--->
-
-
-
-<br>
-
-
-## Screenshots 📷
-
-- #### One screenshot
-
-<div align="center">
-    <img src="PATH FROM PROJECT" alt="Logo" width="400" height="100%">
-</div>
-
-- #### Another screenshot
-
-<div align="center">
-    <img src="PATH FROM PROJECT" alt="Logo" width="400" height="100%">
-</div>
-<br>
-
-
-
 ## Credits 🤝
 
 - [Stack Overflow](https://stackoverflow.com/)
+- [BS4 documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 - ...
