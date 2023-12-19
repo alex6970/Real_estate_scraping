@@ -39,7 +39,6 @@ consmaterials_list = []
 website_list = []
 zipcode_list = []
 
-# regions_list = ["ile-de-france"]
 
 regions_list = ["ile-de-france", "pays-de-la-loire",
                 "nouvelle-aquitaine", "provence-alpes-cote-d-azur"]
@@ -168,11 +167,6 @@ for region in regions_list:
                 # construction date
                 if 'M60.5 20.8c-1.1-.2-2.1.4-2.4 1.5l-6.3 28c-.2 1.1.4' in detail.find('path')['d']:
                     constr_date = re.findall(r'\d+', detail.find('span').get_text())[0]
-                    # try:
-                    #     constr_date = re.findall(r'\d+', detail.find('span').get_text())[0]
-
-                    # except AttributeError:
-                    #     print(details_url)
 
                 # construction materials
                 if 'M102.7 35.4V22.1c0-2.4-1.9-4.3-4.3-4.3H86.2V4.3C86.2' in detail.find('path')['d']:
@@ -228,11 +222,3 @@ df.to_csv('./datasets/real_estate_paris_orpi_df.csv', index=False, encoding='utf
 
 
 # TODO :
-#   PowerBI Analysis and push to github
-
-
-# https://www.orpi.com/recherche/buy?transaction=buy&resultUrl=&locations%5B0%5D%5Bvalue%5D=ile-de-france&locations%5B0%5D%5Blabel%5D=Ile-de-France&agency=&minSurface=40&maxSurface=&minLotSurface=&maxLotSurface=&minStoryLocation=&maxStoryLocation=&newBuild=&oldBuild=&minPrice=&maxPrice=&sort=date-down&layoutType=mixte&page=&recentlySold=false
-
-# https://www.orpi.com/recherche/buy?realEstateTypes%5B%5D=maison&realEstateTypes%5B%5D=appartement&locations%5B0%5D%5Bvalue%5D=ile-de-france&minSurface=40&sort=date-down&layoutType=list&recentlySold=false 
-
-# https://www.orpi.com/recherche/buy?locations%5B0%5D%5Bvalue%5D=pays-de-la-loire&locations%5B0%5D%5Blabel%5D=Pays%20de%20la%20Loire%20-%20R%C3%A9gion&sort=date-down&layoutType=mixte&recentlySold=false
